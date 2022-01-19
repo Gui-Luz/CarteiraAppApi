@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS "CarteiraApp"
+    WITH
+    OWNER = kiwi
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'C'
+    LC_CTYPE = 'C'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = 3;
+
+CREATE TABLE IF NOT EXISTS users(
+                ID SERIAL NOT NULL PRIMARY KEY,
+                NAME VARCHAR NOT NULL UNIQUE,
+                USERNAME VARCHAR NOT NULL UNIQUE,
+                PASSWORD VARCHAR NOT NULL UNIQUE,
+                EMAIL VARCHAR NOT NULL UNIQUE,
+                USER_SINCE VARCHAR NOT NULL
+        );
+
+CREATE TABLE IF NOT EXISTS open_stocks(
+                ID SERIAL NOT NULL PRIMARY KEY,
+                STOCK VARCHAR NOT NULL,
+                DATE DATE NOT NULL,
+                PRICE REAL NOT NULL,
+                PORTFOLIO VARCHAR NOT NULL,
+                USER_ID INT NOT NULL,
+                FOREIGN KEY (USER_ID) REFERENCES users (ID)
+        );
+
+CREATE TABLE IF NOT EXISTS closed_stocks(
+                    ID INTEGER NOT NULL PRIMARY KEY,
+                    STOCK VARCHAR NOT NULL,
+                    DATE DATE NOT NULL,
+                    PRICE REAL NOT NULL,
+                    PORTFOLIO VARCHAR NOT NULL,
+                    USER_ID INT NOT NULL,
+                    SOLD_PRICE REAL NOT NULL,
+                    SOLD_DATE DATE NOT NULL,
+                    FOREIGN KEY (USER_ID)
+                    REFERENCES users (ID)
+            );
+
+CREATE TABLE IF NOT EXISTS stock_prices
+(
+    stock character varying COLLATE pg_catalog."default" NOT NULL,
+    price real NOT NULL,
+    datetime timestamp without time zone NOT NULL,
+    CONSTRAINT stock_prices_pkey PRIMARY KEY (stock)
+);
