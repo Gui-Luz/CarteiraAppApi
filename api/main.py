@@ -20,7 +20,7 @@ PORT = int(config_file['ENV']['port'])
 
 
 app = Flask(__name__)
-app.config['SECRET-KEY'] = config_file['APP KEY']['key']
+app.config['SECRET-KEY'] = config_file['APP']['secret_key']
 api_server = Api(app)
 
 
