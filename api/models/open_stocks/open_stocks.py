@@ -53,7 +53,7 @@ class OpenStock:
             return False
 
     def _validate_portfolio(self):
-        if self.portfolio and (type(self.portfolio) == str) and (len(self.portfolio) <= 20):
+        if self.portfolio and (type(self.portfolio) == str) and (len(self.portfolio) <= 30):
             return True
         else:
             self._set_message('Invalid portfolio.')

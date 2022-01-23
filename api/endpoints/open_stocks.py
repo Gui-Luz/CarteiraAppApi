@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from api.models.open_stocks.open_stocks import NewOpenStock, GetOpenStock, DeleteOpenStock, EditOpenStock
 from api.models.crud import retrieve_all_tuples_from_table
 from api.database.db_connection import OPEN_STOCKS_TABLE
+import ast
 
 # Stocks arguments #
 parser = reqparse.RequestParser()
@@ -12,6 +13,7 @@ parser.add_argument('price', type=float, default=None)
 parser.add_argument('portfolio', type=str, default=None)
 parser.add_argument('user_id', type=int, default=None)
 parser.add_argument('quantity', type=int, default=1)
+parser.add_argument('id_list', type=str, default=None)
 
 
 class AllOpenStocks(Resource):
@@ -71,3 +73,29 @@ class OpenStock(Resource):
             return {'Code': 200, 'Alert': 'Success', 'Message': edit_stock.message, 'Data': edit_stock.json_data()}
         else:
             return {'Code': 400, 'Alert': 'Fail', 'Message': edit_stock.message}
+
+
+class UpdateOpenStock(Resource):
+
+    def __init__(self):
+        args = parser.parse_args()
+        self.id = args.get('id')
+        self.id_list = args.get('id_list')
+        self.stock = args.get('stock')
+        self.date = args.get('date')
+        self.price = args.get('price')
+        self.portfolio = args.get('portfolio')
+        self.user_id = args.get('user_id')
+
+    def put(self):
+        results = []
+        self.id_list = ast.literal_eval(self.id_list)
+        for stock_id in self.id_list:
+            self.id = stock_id
+            edit_stock = EditOpenStock(self)
+            results.append(edit_stock.valid)
+            results.append(edit_stock.crud)
+        if False in results:
+            return {'Code': 400, 'Alert': 'Fail'}
+        else:
+            return {'Code': 200, 'Alert': 'Success'}

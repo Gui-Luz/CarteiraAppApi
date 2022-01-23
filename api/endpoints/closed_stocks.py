@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from api.models.closed_stocks.closed_stocks import NewClosedStock, DeleteClosedStock, GetClosedStock, EditClosedStock
 from api.database.db_connection import CLOSED_STOCKS_TABLE
 from api.models.crud import retrieve_all_tuples_from_table
+import ast
 
 ### USERS arguments ###
 parser = reqparse.RequestParser()
@@ -14,6 +15,7 @@ parser.add_argument('user_id', type=int, default=None)
 parser.add_argument('quantity', type=int, default=1)
 parser.add_argument('sold_price', type=float, default=None)
 parser.add_argument('sold_date', type=str, default=None)
+parser.add_argument('id_list', type=str, default=None)
 
 
 class AllClosedStocks(Resource):
@@ -75,3 +77,30 @@ class ClosedStock(Resource):
         else:
             return {'Code': 400, 'Alert': 'Fail', 'Message': edit_stock.message}
 
+
+class UpdateClosedStock(Resource):
+
+    def __init__(self):
+        args = parser.parse_args()
+        self.id = args.get('id')
+        self.id_list = args.get('id_list')
+        self.stock = args.get('stock')
+        self.date = args.get('date')
+        self.price = args.get('price')
+        self.sold_price = args.get('sold_price')
+        self.sold_date = args.get('sold_date')
+        self.portfolio = args.get('portfolio')
+        self.user_id = args.get('user_id')
+
+    def put(self):
+        results = []
+        self.id_list = ast.literal_eval(self.id_list)
+        for stock_id in self.id_list:
+            self.id = stock_id
+            edit_stock = EditClosedStock(self)
+            results.append(edit_stock.valid)
+            results.append(edit_stock.crud)
+        if False in results:
+            return {'Code': 400, 'Alert': 'Fail'}
+        else:
+            return {'Code': 200, 'Alert': 'Success'}

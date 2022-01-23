@@ -3,8 +3,8 @@ import os
 from flask import Flask
 from flask_restful import Api
 from api.endpoints.users import User, AllUsers, AuthentinticateUser
-from api.endpoints.open_stocks import OpenStock, AllOpenStocks
-from api.endpoints.closed_stocks import ClosedStock, AllClosedStocks
+from api.endpoints.open_stocks import OpenStock, AllOpenStocks, UpdateOpenStock
+from api.endpoints.closed_stocks import ClosedStock, AllClosedStocks, UpdateClosedStock
 from api.endpoints.operations import UserOpenOperations
 from api.endpoints.portfolios import Portfolio
 from api.endpoints.records import UserRecords
@@ -31,9 +31,11 @@ api_server.add_resource(AuthentinticateUser, config_file['ENDPOINTS']['auth_user
 
 api_server.add_resource(OpenStock, config_file['ENDPOINTS']['open_stock'])
 api_server.add_resource(AllOpenStocks, config_file['ENDPOINTS']['all_open_stocks'])
+api_server.add_resource(UpdateOpenStock, config_file['ENDPOINTS']['update_open_stock'])
 
 api_server.add_resource(ClosedStock, config_file['ENDPOINTS']['closed_stock'])
 api_server.add_resource(AllClosedStocks, config_file['ENDPOINTS']['all_closed_stocks'])
+api_server.add_resource(UpdateClosedStock, config_file['ENDPOINTS']['update_closed_stock'])
 
 api_server.add_resource(UserOpenOperations, config_file['ENDPOINTS']['open_operations'])
 
@@ -42,4 +44,4 @@ api_server.add_resource(UserRecords, config_file['ENDPOINTS']['records'])
 
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG, port=PORT)
+    app.run(debug=DEBUG, port=2000)

@@ -13,7 +13,7 @@ parser.add_argument('portfolio', type=str, default=None)
 parser.add_argument('user_id', type=int, default=None)
 parser.add_argument('quantity', type=int, default=1)
 parser.add_argument('portfolio', type=str, default=None)
-parser.add_argument('user_id', type=int, default=None)
+parser.add_argument('user_id', type=list, default=None)
 
 
 class UserOpenOperations(Resource):

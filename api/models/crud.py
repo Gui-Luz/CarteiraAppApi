@@ -29,7 +29,7 @@ def retrieve_user_tuples_from_table(table, user_id):
 
 def retrieve_user_closed_records(user_id):
     syntax = f"SELECT STOCK, DATE, PRICE, PORTFOLIO, SOLD_PRICE, SOLD_DATE, " \
-             f"COUNT (ID) FROM closed_stocks WHERE USER_ID = {user_id} GROUP BY STOCK, DATE, PRICE, PORTFOLIO, SOLD_PRICE, " \
+             f"COUNT (ID) , array_agg (ID) as id_list FROM closed_stocks WHERE USER_ID = {user_id} GROUP BY STOCK, DATE, PRICE, PORTFOLIO, SOLD_PRICE, " \
              f"SOLD_DATE;"
     cursor, conn = sql()
     cursor.execute(syntax)
@@ -40,7 +40,7 @@ def retrieve_user_closed_records(user_id):
 
 def retrieve_user_open_records(user_id):
     syntax = f"SELECT STOCK, DATE, PRICE, PORTFOLIO, " \
-             f"COUNT (ID) FROM open_stocks WHERE USER_ID = {user_id} GROUP BY STOCK, DATE, PRICE, PORTFOLIO;"
+             f"COUNT (ID) , array_agg (ID) as id_list FROM open_stocks WHERE USER_ID = {user_id} GROUP BY STOCK, DATE, PRICE, PORTFOLIO;"
     cursor, conn = sql()
     cursor.execute(syntax)
     tuples = cursor.fetchall()
@@ -127,22 +127,6 @@ def insert_tuple_on_closed_stocks_table(stock):
     except Exception as e:
         print(e)
         return False
-
-
-# def insert_tuple_on_open_stocks_table1(stock):
-#     try:
-#         syntax = f"""INSERT INTO {OPEN_STOCKS_TABLE} (STOCK, DATE, PRICE, PORTFOLIO,
-#                     USER_ID) VALUES ('{stock.stock}', '{stock.date}', '{stock.price}',
-#                     '{stock.portfolio}', '{stock.user_id}')"""
-#         cursor, conn = sql()
-#         cursor.execute(syntax)
-#         id = cursor.lastrowid
-#         conn.commit()
-#         conn.close()
-#         return True, id
-#     except Exception as e:
-#         print(e)
-#         return False, None
 
 
 def insert_tuple_on_open_stocks_table(stock):
