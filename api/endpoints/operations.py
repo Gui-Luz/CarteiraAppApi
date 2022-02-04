@@ -13,7 +13,7 @@ parser.add_argument('portfolio', type=str, default=None)
 parser.add_argument('user_id', type=int, default=None)
 parser.add_argument('quantity', type=int, default=1)
 parser.add_argument('portfolio', type=str, default=None)
-parser.add_argument('user_id', type=list, default=None)
+parser.add_argument('user_id', type=int, default=None)
 
 
 class UserOpenOperations(Resource):
@@ -36,6 +36,7 @@ class UserOpenOperations(Resource):
             return {'Code': 400, 'Alert': 'Fail', 'Message': new_operation.message}
 
     def delete(self):
+        print(self.user_id)
         delete_operation = DeleteOperation(self.user_id, self.stock, self.sold_date, self.sold_price, self.portfolio,
                                            self.quantity)
         if delete_operation.valid and delete_operation.crud:

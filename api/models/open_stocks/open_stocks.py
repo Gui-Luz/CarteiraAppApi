@@ -63,7 +63,7 @@ class OpenStock:
         if self.user_id and (type(self.user_id) == int):
             return True
         else:
-            self._set_message('Invalid user id.')
+            self._set_message('Invalid user id....')
             return False
 
     def _validation(self):
